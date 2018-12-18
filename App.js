@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Alert, Button, StyleSheet, Text, View, TextInput } from 'react-native';
+import {Alert, Button, StyleSheet, Text, View, TextInput, FlatList } from 'react-native';
 
 export default class App extends Component {
 
@@ -17,6 +17,13 @@ export default class App extends Component {
   }
 
   placeNameChangeHandler = val =>{
+    
+    this.setState({
+      placeName: val
+    });
+  }
+
+  placeSubmitHandler = val =>{
     if(this.state.placeName.trim() === ""){
       return;
     }
@@ -26,12 +33,11 @@ export default class App extends Component {
       };
     });
   }
-
-  _onPressButton() {
-    Alert.alert('You tapped the button!')
-  }
   
   render() {
+    const placesOutput = this.state.places.map((place,i)=>(
+      <Text key={i}>{place}</Text>
+    ));
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -42,9 +48,11 @@ export default class App extends Component {
             onChangeText={this.placeNameChangeHandler}/>
           <Button
             style={styles.placeButton}
-            onPress={this._onPressButton}
-            title="Add"
-          />
+            onPress={this.placeSubmitHandler}
+            title="Add"/>
+        </View>
+        <View>
+          {placesOutput}
         </View>
       </View>
     );
@@ -53,7 +61,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 26,
     backgroundColor: '#FFF',
     alignItems: 'center',
